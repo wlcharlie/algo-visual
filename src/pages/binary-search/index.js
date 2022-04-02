@@ -16,7 +16,7 @@ function initElementsArray(length = 7, target = 5) {
   }))
 }
 
-export default function LinearSearchPage() {
+export default function BinarySearchPage() {
   const variabelRef = useRef()
   const arrowRef = useRef()
   const [isReady, setIsReady] = useState(false)
