@@ -15,6 +15,8 @@ export default function CircleElement({ element }) {
       ele.isAlive
         ? ele.isTarget && ele.isMiddle
           ? colors.red[400]
+          : ele.isMiddle
+          ? colors.cyan[400]
           : colors.green[500]
         : colors.gray[200],
     // eslint-disable-next-line
@@ -42,7 +44,7 @@ export default function CircleElement({ element }) {
 
       <VStack
         position="absolute"
-        bottom={-(ELE_AREA_ARGUS / 2) - 4 - 2}
+        bottom={-(ELE_AREA_ARGUS / 2) - 2}
         spacing={1}
       >
         {element.isTarget && (
