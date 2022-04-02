@@ -6,7 +6,7 @@ const ELE_AREA_ARGUS = 12
 
 const AnimatedCircle = animated(Circle)
 
-export default function CircleElement({ element }) {
+export default function CircleElement({ element, index }) {
   const { colors } = useTheme()
 
   const colorControl = useCallback(
@@ -23,21 +23,27 @@ export default function CircleElement({ element }) {
   })
 
   return (
-    <VStack position="relative" ref={element.ref}>
-      <AnimatedCircle
-        style={{ ...scaleSpring, ...bgSpring }}
-        width={ELE_AREA_ARGUS}
-        height={ELE_AREA_ARGUS}
-        color="white"
-        fontWeight="bolder"
-      >
-        {element.value}
-      </AnimatedCircle>
+    <AnimatedCircle
+      style={{ ...scaleSpring, ...bgSpring }}
+      width={ELE_AREA_ARGUS}
+      height={ELE_AREA_ARGUS}
+      color="white"
+      fontWeight="bolder"
+      position="relative"
+      zIndex={999 - index}
+      ref={element.ref}
+    >
+      {element.value}
       {element.isTarget && (
-        <Tag position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 3} colorScheme="red">
+        <Tag
+          position="absolute"
+          bottom={-(ELE_AREA_ARGUS / 2) - 1}
+          colorScheme="red"
+          zIndex={999 - index}
+        >
           HERE
         </Tag>
       )}
-    </VStack>
+    </AnimatedCircle>
   )
 }

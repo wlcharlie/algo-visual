@@ -29,6 +29,7 @@ export default function BinarySearchPage() {
     const target = getTarget()
 
     setElements(initElementsArray(length, target))
+    setLogSet([{ left: 1, right: length, middle: Math.floor((length + 1) / 2), value: target }])
   }
 
   const RunningProcess = async () => {
@@ -68,10 +69,10 @@ export default function BinarySearchPage() {
         if (i === set.length - 1) {
           setIsReady(false)
         }
-      }, (i === 0 ? 1000 : 1000 * i) / speedRate)
+      }, (i === 0 ? 1000 : 1000 * (i + 1)) / speedRate)
 
       if (target === middle) {
-        setLogSet(set)
+        setLogSet(prev => [...prev, ...set])
         break
       }
     }
@@ -112,8 +113,6 @@ export default function BinarySearchPage() {
         position="relative"
         flexWrap="wrap"
       >
-        {/* <Pointer position={arrowPosition} ref={arrowRef} /> */}
-
         {elements.map(ele => (
           <CircleElement key={ele.value} element={ele} />
         ))}

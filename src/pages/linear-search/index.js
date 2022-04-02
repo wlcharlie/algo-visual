@@ -19,7 +19,7 @@ export default function LinearSearchPage() {
   const arrowRef = useRef()
   const [isReady, setIsReady] = useState(false)
   const [elements, setElements] = useState(() => initElementsArray())
-  const [arrowPosition, setArrowPosition] = useState({ x: 50, y: 50 })
+  const [arrowPosition, setArrowPosition] = useState({ x: -50, y: 0 })
 
   const SettingView = () => {
     const { getLength, getTarget } = variabelRef.current
@@ -41,31 +41,35 @@ export default function LinearSearchPage() {
       const top = ref.current.offsetTop
       const left = ref.current.offsetLeft
       const positionX = left
-      const positionY = top - arrowHeight
-      setTimeout(() => {
-        setElements(prev =>
-          prev.map((ele, eleIndex) => {
-            if (eleIndex === i && target !== i + 1 && i === elements.length - 1) {
-              return { ...ele, isActive: false, isAlive: false }
-            }
+      const positionY = top - arrowHeight < top ? top - arrowHeight : 0
 
-            if (eleIndex === i) {
-              return { ...ele, isActive: true }
-            }
+      setTimeout(
+        () => {
+          setElements(prev =>
+            prev.map((ele, eleIndex) => {
+              if (eleIndex === i && target !== i + 1 && i === elements.length - 1) {
+                return { ...ele, isActive: false, isAlive: false }
+              }
 
-            if (eleIndex < i) {
-              return { ...ele, isActive: false, isAlive: false }
-            }
+              if (eleIndex === i) {
+                return { ...ele, isActive: true }
+              }
 
-            return { ...ele, isActive: false }
-          })
-        )
-        setArrowPosition({ x: positionX, y: positionY })
+              if (eleIndex < i) {
+                return { ...ele, isActive: false, isAlive: false }
+              }
 
-        if (i === elements.length - 1 || i + 1 === target) {
-          setIsReady(false)
-        }
-      }, (1000 * i) / speedRate)
+              return { ...ele, isActive: false }
+            })
+          )
+          setArrowPosition({ x: positionX, y: positionY })
+
+          if (i === elements.length - 1 || i + 1 === target) {
+            setIsReady(false)
+          }
+        },
+        i === 0 ? 1000 : (1000 * (i + 1)) / speedRate
+      )
 
       if (target === i + 1) {
         break
@@ -105,8 +109,8 @@ export default function LinearSearchPage() {
       >
         <Pointer position={arrowPosition} ref={arrowRef} />
 
-        {elements.map(ele => (
-          <CircleElement key={ele.value} element={ele} />
+        {elements.map((ele, index) => (
+          <CircleElement key={ele.value} element={ele} index={index} />
         ))}
       </Flex>
     </Flex>
