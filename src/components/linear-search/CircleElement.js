@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useSpring, animated } from "react-spring"
-import { Circle, Tag, useTheme, VStack } from "@chakra-ui/react"
+import { Circle, Tag, useTheme } from "@chakra-ui/react"
 
 const ELE_AREA_ARGUS = 12
 
