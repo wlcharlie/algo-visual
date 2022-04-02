@@ -11,13 +11,18 @@ export default function CircleElement({ element }) {
   const { colors } = useTheme()
 
   const colorControl = useCallback(
-    ele => (ele.isAlive ? (ele.isActive ? colors.red[400] : colors.green[500]) : colors.gray[200]),
+    (ele) =>
+      ele.isAlive
+        ? ele.isTarget && ele.isMiddle
+          ? colors.red[400]
+          : colors.green[500]
+        : colors.gray[200],
     // eslint-disable-next-line
     []
   )
 
   const scaleSpring = useSpring({
-    transform: `scale(${element.isActive ? 1.2 : 1})`,
+    transform: `scale(${element.isTarget && element.isMiddle ? 1.2 : 1})`,
   })
   const bgSpring = useSpring({
     backgroundColor: colorControl(element),
@@ -35,7 +40,11 @@ export default function CircleElement({ element }) {
         {element.value}
       </AnimatedCircle>
 
-      <VStack position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 4 - 2} spacing={1}>
+      <VStack
+        position="absolute"
+        bottom={-(ELE_AREA_ARGUS / 2) - 4 - 2}
+        spacing={1}
+      >
         {element.isTarget && (
           <Tag colorScheme="red">
             <StarIcon />
