@@ -67,7 +67,7 @@ export default function LinearSearchPage() {
         if (i === elements.length - 1 || i + 1 === target) {
           setIsReady(false)
         }
-      }, speedRate * 1000 * i)
+      }, (1000 * i) / speedRate)
 
       if (target === i + 1) {
         break

@@ -1,7 +1,7 @@
 import { useState, useRef, createRef, useLayoutEffect } from "react"
-import VariableSection from "components/linear-search/VariableSection"
-import CircleElement from "components/linear-search/CircleElement"
-import Pointer from "components/linear-search/Pointer"
+import VariableSection from "components/binary-search/VariableSection"
+import CircleElement from "components/binary-search/CircleElement"
+import Pointer from "components/binary-search/Pointer"
 import { Flex, Button } from "@chakra-ui/react"
 
 function initElementsArray(length = 7, target = 5) {
@@ -11,6 +11,7 @@ function initElementsArray(length = 7, target = 5) {
     isTarget: i + 1 === target, // to control ele is target or not
     isHead: i === 0, // to control ele is head or not
     isTail: i === length - 1, // to control ele is tail or not
+    isMiddle: i === Math.floor(length / 2),
     value: i + 1,
     ref: createRef(),
   }))
@@ -67,7 +68,7 @@ export default function BinarySearchPage() {
         if (i === elements.length - 1 || i + 1 === target) {
           setIsReady(false)
         }
-      }, speedRate * 1000 * i)
+      }, (1000 * i) / speedRate)
 
       if (target === i + 1) {
         break
@@ -88,12 +89,12 @@ export default function BinarySearchPage() {
 
     // eslint-disable-next-line
   }, [isReady])
-
+  console.log(elements)
   return (
     <Flex width="100%" height="100%" p={2} direction="column" gap={5}>
       <VariableSection ref={variabelRef} />
       <Button colorScheme="blue" onClick={handleRun} disabled={isReady}>
-        RUN
+        RUNNN
       </Button>
       <Flex
         width="100%"

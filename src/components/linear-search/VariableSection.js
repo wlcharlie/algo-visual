@@ -36,8 +36,8 @@ function VariableSection(props, ref) {
           variant="filled"
           value={speedRate}
           onChange={value => setSpeedRate(value)}
-          step={0.01}
-          precision={2}
+          step={0.1}
+          precision={1}
         >
           <NumberInputField placeholder="Speed Rate" />
         </NumberInput>
