@@ -1,8 +1,8 @@
 import { useState, useImperativeHandle, forwardRef } from "react"
 import { Flex, NumberInput, NumberInputField, Tag, VStack } from "@chakra-ui/react"
 
-const DEFAULT_LENGTH = 7
-const DEFAULT_TARGET = 5
+const DEFAULT_LENGTH = 10
+const DEFAULT_TARGET = 7
 const DEFAULT_SPEED = 1
 
 function VariableSection(props, ref) {

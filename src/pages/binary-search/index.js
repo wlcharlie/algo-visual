@@ -1,28 +1,27 @@
 import { useState, useRef, createRef, useLayoutEffect } from "react"
 import VariableSection from "components/binary-search/VariableSection"
 import CircleElement from "components/binary-search/CircleElement"
-import Pointer from "components/binary-search/Pointer"
-import { Flex, Button } from "@chakra-ui/react"
+import { Flex, Button, HStack, useDisclosure } from "@chakra-ui/react"
+import LogSetSection from "components/binary-search/LogSetSection"
 
-function initElementsArray(length = 7, target = 5) {
+function initElementsArray(length = 10, target = 7) {
   return Array.from({ length }).map((_, i) => ({
-    isActive: false, // to control ele is :active or not
     isAlive: true, // to control ele is in range or not
     isTarget: i + 1 === target, // to control ele is target or not
     isHead: i === 0, // to control ele is head or not
     isTail: i === length - 1, // to control ele is tail or not
-    isMiddle: i === Math.floor(length / 2),
+    isMiddle: i + 1 === Math.floor(length / 2),
     value: i + 1,
     ref: createRef(),
   }))
 }
 
 export default function BinarySearchPage() {
+  const { isOpen, onToggle } = useDisclosure()
   const variabelRef = useRef()
-  const arrowRef = useRef()
   const [isReady, setIsReady] = useState(false)
   const [elements, setElements] = useState(() => initElementsArray())
-  const [arrowPosition, setArrowPosition] = useState({ x: 50, y: 50 })
+  const [logSet, setLogSet] = useState([])
 
   const SettingView = () => {
     const { getLength, getTarget } = variabelRef.current
@@ -32,45 +31,47 @@ export default function BinarySearchPage() {
     setElements(initElementsArray(length, target))
   }
 
-  const RunningProcess = () => {
+  const RunningProcess = async () => {
     const { getTarget, getSpeedRate } = variabelRef.current
     const target = getTarget()
     const speedRate = getSpeedRate()
 
-    const arrowHeight = arrowRef.current.offsetHeight
+    const set = []
+    let left = 1
+    let right = elements.length
+    let middle = Math.floor((right + left) / 2)
 
-    for (let i = 0; i < elements.length; i++) {
-      const ref = elements[i].ref
-      const top = ref.current.offsetTop
-      const left = ref.current.offsetLeft
-      const positionX = left
-      const positionY = top - arrowHeight
+    for (let i = 0; left <= right; i++) {
+      console.log(left, middle, right, "target:", target)
+
+      if (target < middle) {
+        right = middle - 1
+      }
+
+      if (target > middle) {
+        left = middle + 1
+      }
+
+      middle = Math.floor((right + left) / 2)
+      set.push({ left, middle, right, target })
+
       setTimeout(() => {
         setElements(prev =>
-          prev.map((ele, eleIndex) => {
-            if (eleIndex === i && target !== i + 1 && i === elements.length - 1) {
-              return { ...ele, isActive: false, isAlive: false }
-            }
-
-            if (eleIndex === i) {
-              return { ...ele, isActive: true }
-            }
-
-            if (eleIndex < i) {
-              return { ...ele, isActive: false, isAlive: false }
-            }
-
-            return { ...ele, isActive: false }
-          })
+          prev.map(item => ({
+            ...item,
+            isHead: item.value === set[i].left,
+            isMiddle: item.value === set[i].middle,
+            isTail: item.value === set[i].right,
+            isAlive: item.value >= set[i].left && item.value <= set[i].right,
+          }))
         )
-        setArrowPosition({ x: positionX, y: positionY })
-
-        if (i === elements.length - 1 || i + 1 === target) {
+        if (i === set.length - 1) {
           setIsReady(false)
         }
-      }, (1000 * i) / speedRate)
+      }, (i === 0 ? 1000 : 1000 * i) / speedRate)
 
-      if (target === i + 1) {
+      if (target === middle) {
+        setLogSet(set)
         break
       }
     }
@@ -89,13 +90,19 @@ export default function BinarySearchPage() {
 
     // eslint-disable-next-line
   }, [isReady])
-  console.log(elements)
+
   return (
     <Flex width="100%" height="100%" p={2} direction="column" gap={5}>
       <VariableSection ref={variabelRef} />
-      <Button colorScheme="blue" onClick={handleRun} disabled={isReady}>
-        RUNNN
-      </Button>
+      <HStack>
+        <Button colorScheme="green" disabled={logSet.length === 0} onClick={onToggle}>
+          SHOW LOG
+        </Button>
+        <Button colorScheme="blue" onClick={handleRun} disabled={isReady} flexGrow="1">
+          RUN
+        </Button>
+      </HStack>
+      <LogSetSection data={logSet} isOpen={isOpen} />
       <Flex
         width="100%"
         justifyContent="center"
@@ -104,9 +111,8 @@ export default function BinarySearchPage() {
         gap={3}
         position="relative"
         flexWrap="wrap"
-        mt={10}
       >
-        <Pointer position={arrowPosition} ref={arrowRef} />
+        {/* <Pointer position={arrowPosition} ref={arrowRef} /> */}
 
         {elements.map(ele => (
           <CircleElement key={ele.value} element={ele} />

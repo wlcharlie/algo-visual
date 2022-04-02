@@ -9,8 +9,6 @@ function initElementsArray(length = 7, target = 5) {
     isActive: false, // to control ele is :active or not
     isAlive: true, // to control ele is in range or not
     isTarget: i + 1 === target, // to control ele is target or not
-    isHead: i === 0, // to control ele is head or not
-    isTail: i === length - 1, // to control ele is tail or not
     value: i + 1,
     ref: createRef(),
   }))

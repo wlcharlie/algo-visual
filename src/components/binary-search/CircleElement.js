@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useSpring, animated } from "react-spring"
-import { Circle, Tag, TagLabel, useTheme, VStack } from "@chakra-ui/react"
+import { Circle, Tag, useTheme, VStack } from "@chakra-ui/react"
 import { StarIcon } from "@chakra-ui/icons"
 
 const ELE_AREA_ARGUS = 12
@@ -34,26 +34,22 @@ export default function CircleElement({ element }) {
       >
         {element.value}
       </AnimatedCircle>
-      {element.isTarget && (
-        <Tag position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 3} colorScheme="red">
-          <StarIcon />
-        </Tag>
-      )}
-      {element.isHead && (
-        <Tag position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 3} colorScheme="orange">
-          L
-        </Tag>
-      )}
-      {element.isTail && (
-        <Tag position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 3} colorScheme="orange">
-          R
-        </Tag>
-      )}
-      {element.isMiddle && (
-        <Tag position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 3} colorScheme="cyan">
-          MID
-        </Tag>
-      )}
+
+      <VStack position="absolute" bottom={-(ELE_AREA_ARGUS / 2) - 4 - 2} spacing={1}>
+        {element.isTarget && (
+          <Tag colorScheme="red">
+            <StarIcon />
+          </Tag>
+        )}
+        {element.isMiddle && <Tag colorScheme="cyan">MID</Tag>}
+
+        {!element.isMiddle && !element.isTarget && (
+          <>
+            {element.isHead && <Tag colorScheme="orange">L</Tag>}
+            {element.isTail && <Tag colorScheme="orange">R</Tag>}
+          </>
+        )}
+      </VStack>
     </VStack>
   )
 }
